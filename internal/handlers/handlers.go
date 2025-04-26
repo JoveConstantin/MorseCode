@@ -12,10 +12,11 @@ import (
 )
 
 func MainHandle(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	filePath := filepath.Join("..", "index.html")
 	file, err := os.Open(filePath)
 	if err != nil {
-		http.Error(w, "File not found", http.StatusNotFound)
+		http.Error(w, "File not found", http.StatusOK)
 		return
 	}
 	defer file.Close()
@@ -23,11 +24,15 @@ func MainHandle(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(w, "Error reading file", http.StatusInternalServerError)
 	}
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(http.StatusOK)
 }
 
 func UploadHandle(w http.ResponseWriter, req *http.Request) {
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if req.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 
 	err := req.ParseMultipartForm(10 << 20)
 	if err != nil {
@@ -61,7 +66,7 @@ func UploadHandle(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Converted data: %s\nOriginal text: %s ", convertData, fileStrings)
 
