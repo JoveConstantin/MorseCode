@@ -16,7 +16,8 @@ func MainHandle(w http.ResponseWriter, req *http.Request) {
 	filePath := filepath.Join("..", "index.html")
 	file, err := os.Open(filePath)
 	if err != nil {
-		http.Error(w, "File not found", http.StatusOK)
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "Index page not found")
 		return
 	}
 	defer file.Close()
@@ -28,7 +29,7 @@ func MainHandle(w http.ResponseWriter, req *http.Request) {
 
 func UploadHandle(w http.ResponseWriter, req *http.Request) {
 
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	if req.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -66,8 +67,7 @@ func UploadHandle(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Converted data: %s\nOriginal text: %s ", convertData, fileStrings)
+	fmt.Fprintf(w, "Converted data:\n%s\n\nOriginal text:\n%s", convertData, fileStrings)
 
 }
