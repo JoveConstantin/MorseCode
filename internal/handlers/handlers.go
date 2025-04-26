@@ -61,6 +61,6 @@ func UploadHandle(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Converted data:\n%s", convertData)
+	fmt.Fprintf(w, "Converted data: %s\nOriginal text: %s ", convertData, fileStrings)
 
 }
