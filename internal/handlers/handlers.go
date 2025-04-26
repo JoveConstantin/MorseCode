@@ -23,6 +23,8 @@ func MainHandle(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(w, "Error reading file", http.StatusInternalServerError)
 	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
 }
 
 func UploadHandle(w http.ResponseWriter, req *http.Request) {
@@ -59,7 +61,7 @@ func UploadHandle(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Converted data: %s\nOriginal text: %s ", convertData, fileStrings)
 
