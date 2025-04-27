@@ -17,6 +17,7 @@ func MainHandle(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 	http.ServeFile(w, req, "../index.html")
 }
 
