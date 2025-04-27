@@ -10,6 +10,7 @@ import (
 func main() {
 	logger := log.New(os.Stdout, "MyServer:", log.LstdFlags)
 	server := server.MyRouter(logger)
+	logger.Println("Port:", server.Server.Addr)
 	if err := server.Server.ListenAndServe(); err != nil {
 		logger.Fatal("Server failed: ", err)
 	}

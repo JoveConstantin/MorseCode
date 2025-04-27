@@ -13,18 +13,11 @@ import (
 
 func MainHandle(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	filePath := filepath.Join("..", "index.html")
-	file, err := os.Open(filePath)
-	if err != nil {
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, "Index page not found")
+	if req.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	defer file.Close()
-	_, err = io.Copy(w, file)
-	if err != nil {
-		http.Error(w, "Error reading file", http.StatusInternalServerError)
-	}
+	http.ServeFile(w, req, "../index.html")
 }
 
 func UploadHandle(w http.ResponseWriter, req *http.Request) {
@@ -68,6 +61,10 @@ func UploadHandle(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Converted data:\n%s\n\nOriginal text:\n%s", convertData, fileStrings)
+	_, err = fmt.Fprintf(w, "Converted data:\n%s\n\nOriginal text:\n%s", convertData, fileStrings)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 
 }

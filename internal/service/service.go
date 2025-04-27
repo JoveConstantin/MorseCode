@@ -9,7 +9,7 @@ import (
 
 func MorseOrTextConverter(s string) (string, error) {
 	if len(s) == 0 {
-		return "", errors.New("Empty file transferred")
+		return "", errors.New("morse.ErrNoEncoding")
 	}
 	if isMorse(s) {
 		return morse.ToText(s), nil
